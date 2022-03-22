@@ -1,6 +1,7 @@
 package secretservice
 
 import (
+	"fmt"
 	"math/big"
 	"time"
 
@@ -339,10 +340,8 @@ func (s *SecretService) PromptAndWait(prompt dbus.ObjectPath) (paths *dbus.Varia
 	if prompt == NullPrompt {
 		return nil, nil
 	}
-	call := s.Obj(prompt).Call("org.freedesktop.Secret.Prompt.Prompt", NilFlags, "Keyring Prompt")
-	if call.Err != nil {
-		return nil, errors.Wrap(err, "failed to prompt")
-	}
+	ch := make(chan *dbus.Call, 10)
+	s.Obj(prompt).Go("org.freedesktop.Secret.Prompt.Prompt", NilFlags, ch, "Keyring prompt")
 	for {
 		var result PromptCompletedResult
 		select {
@@ -366,6 +365,13 @@ func (s *SecretService) PromptAndWait(prompt dbus.ObjectPath) (paths *dbus.Varia
 			return &result.Paths, nil
 		case <-time.After(30 * time.Second):
 			return nil, errors.New("prompt timed out")
+		case call := <-ch:
+			if call.Err != nil {
+				fmt.Println(err, "failed to prompt")
+			}
+			for _, v := range call.Body {
+				fmt.Println(v.(string))
+			}
 		}
 	}
 }
