@@ -4,6 +4,7 @@
 package keychain
 
 /*
+#cgo CFLAGS: -mmacosx-version-min=11.0
 #cgo LDFLAGS: -framework CoreFoundation
 
 #include <CoreFoundation/CoreFoundation.h>

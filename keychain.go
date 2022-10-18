@@ -8,6 +8,7 @@ package keychain
 // Also see https://developer.apple.com/library/ios/documentation/Security/Conceptual/keychainServConcepts/01introduction/introduction.html .
 
 /*
+#cgo CFLAGS: -mmacosx-version-min=11.0
 #cgo LDFLAGS: -framework CoreFoundation -framework Security
 
 #include <CoreFoundation/CoreFoundation.h>
