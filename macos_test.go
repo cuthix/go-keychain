@@ -56,7 +56,7 @@ func TestGenericPasswordRef(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	// Query reference and delete by reference
+	// Query reference and delete
 	query := NewItem()
 	query.SetSecClass(SecClassGenericPassword)
 	query.SetService(service)
@@ -69,7 +69,7 @@ func TestGenericPasswordRef(t *testing.T) {
 	} else if ref == 0 {
 		t.Fatal("Missing result")
 	} else {
-		err = DeleteItemRef(ref)
+		err = DeleteItem(query)
 		if err != nil {
 			t.Fatal(err)
 		}
