@@ -139,6 +139,13 @@ func CFStringToString(s C.CFStringRef) string {
 	return string(buf[:usedBufLen])
 }
 
+func CFTypeRefToStringSafe(v C.CFTypeRef) (string, error) {
+	if C.CFGetTypeID(v) != C.CFStringGetTypeID() {
+		return "", errors.New("value is not a string")
+	}
+	return CFStringToString(C.CFStringRef(v)), nil
+}
+
 // ArrayToCFArray will return a CFArrayRef and if non-nil, must be released with
 // Release(ref).
 func ArrayToCFArray(a []C.CFTypeRef) C.CFArrayRef {

@@ -475,15 +475,35 @@ func convertResult(d C.CFDictionaryRef) (*QueryResult, error) {
 	for k, v := range m {
 		switch attrKey(k) {
 		case ServiceKey:
-			result.Service = CFStringToString(C.CFStringRef(v))
+			s, err := CFTypeRefToStringSafe(v)
+			if err != nil {
+				return nil, err
+			}
+			result.Service = s
 		case AccountKey:
-			result.Account = CFStringToString(C.CFStringRef(v))
+			s, err := CFTypeRefToStringSafe(v)
+			if err != nil {
+				return nil, err
+			}
+			result.Account = s
 		case AccessGroupKey:
-			result.AccessGroup = CFStringToString(C.CFStringRef(v))
+			s, err := CFTypeRefToStringSafe(v)
+			if err != nil {
+				return nil, err
+			}
+			result.AccessGroup = s
 		case LabelKey:
-			result.Label = CFStringToString(C.CFStringRef(v))
+			s, err := CFTypeRefToStringSafe(v)
+			if err != nil {
+				return nil, err
+			}
+			result.Label = s
 		case DescriptionKey:
-			result.Description = CFStringToString(C.CFStringRef(v))
+			s, err := CFTypeRefToStringSafe(v)
+			if err != nil {
+				return nil, err
+			}
+			result.Description = s
 		case DataKey:
 			b, err := CFDataToBytes(C.CFDataRef(v))
 			if err != nil {
